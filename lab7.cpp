@@ -12,31 +12,25 @@ private:
 	unsigned int columns;
 	Type** element;
 
-	void fill_matrix(string name_of_file, Type** &element);
+	Type** fill_matrix(string name_of_file, Type** &element);
 
 public:	
-	Matrix(unsigned int rows, unsigned int columns)
+	Matrix(unsigned int rows, unsigned int columns, Type** element)
 	{
 		this->rows = rows;
 		this->columns = columns;
-		Type** element = new Type*[rows];
-		for (unsigned int i = 0; i < rows; ++i) element[i] = new Type[columns];
-
+		this->element = element;
 	}
-	
-	unsigned int get_rows() { return rows; }
-	unsigned int get_columns() { return columns; }
-	Type get_element(unsigned int row, unsigned int column) { return element[row][column]; }
 
 	void printf(ostream& print)
 	{
-		print << "Matrix: " << endl; 
+		print << endl << "Matrix: " << endl << endl; 
 
-		for (unsigned int i = 0; i < get_rows(); ++i)
+		for (unsigned int i = 0; i < rows; ++i)
 		{
-			for (unsigned int j = 0; j < get_columns(); ++j)
+			for (unsigned int j = 0; j < columns; ++j)
 			{
-				print << get_element(i,j) << " ";
+				print << element[i][j] << " ";
 			}
 			print << endl;
 		}
@@ -44,41 +38,41 @@ public:
 
 	friend ostream& operator <<(ostream& print,const Matrix<Type>& matrix); 
 
-	void fill(Type** &element) 
+	Type** fill(Type** &element) 
 	{ 
 		fill_matrix("C:\\cpp\\baumanclasses\\labs-sem2\\lab7\\Matrix.txt", element); 
-	}
-
-	~Matrix()
-	{
-		for (unsigned int i = 0; i < rows; ++i) delete element[i]; 
-		delete [] element;
 	}
 };
 
 template <class Type>
-void Matrix<Type>::fill_matrix(string name_of_file, Type** &element)
+Type** Matrix<Type>::fill_matrix(string name_of_file, Type** &element)
 {
-	ifstream fin(name_of_file);
+	ifstream fin(name_of_file, ios::in);
 
-	if (!fin.is_open()) cout << "Error!" << endl;
-    else
-    {	
-		for (unsigned int i = 0; i < get_rows(); ++i)
+	try
+	{
+		if (!fin.is_open()) throw 1;
+	}
+	catch(int test)
+	{
+		cout << endl << "[-] Exception " << test << ": The file wasn't found!" << endl;
+		exit(1);
+	}
+
+	for (unsigned int i = 0; i < rows; ++i)
+	{
+		for (unsigned int j = 0; j < columns; ++j)
 		{
-			for (unsigned int j = 0; j < get_columns(); ++j)
-			{
-				fin >> element[i][j];
-			}
+			fin >> element[i][j];
 		}
+	}
 
-		fin.close();
-    }	
+		fin.close();	
 } 
 
 template <class Type>
 ostream& operator <<(ostream& print, Matrix<Type>& matrix)
-	{
+	{	
 		matrix.printf(print);
 		return print;
 	}
@@ -90,14 +84,17 @@ int main(void)
 
 	cout << endl << "Print the size of the Matrix:" << endl;
 	cout << "Rows: "; cin >> rows;
-	cout << endl << "Columns: "; cin >> columns; 
+	cout << "Columns: "; cin >> columns; 
 
 	double** element = new double*[rows];
 	for (unsigned int i = 0; i < rows; ++i) element[i] = new double[columns];
 
-	Matrix<double> matrix(rows, columns);
+	Matrix<double> matrix(rows, columns,element);
 	matrix.fill(element);
 	cout << matrix;
+
+	for (unsigned int i = 0; i < rows; ++i) delete element[i]; 
+		delete [] element;
 
 	cout << endl << endl << "Press any button to exit the program " << endl;
 	_getch();
