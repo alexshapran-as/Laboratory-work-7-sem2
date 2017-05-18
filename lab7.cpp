@@ -11,7 +11,6 @@ class Matrix
 private: 
 	unsigned int rows;
 	unsigned int columns;
-	//Matrix<Type> matrix1;
 
 	Type** fill_matrix(string name_of_file, Type** &element);
 
@@ -70,11 +69,11 @@ public:
 	friend ostream& operator <<(ostream& print,const Matrix<Type>& matrix);
 	friend istream& operator >>(istream& write,const Matrix<Type>& matrix);
 	
-	Matrix<Type>& operator +(Matrix<Type>& matrix1)
+	Matrix<Type>& operator +(Matrix<Type>& matrix)
 	{
 		try 
 		{
-			if (matrix1.rows != rows || matrix1.columns != columns) throw 2;
+			if (matrix.rows != rows || matrix.columns != columns) throw 2;
 		}
 		catch(int test)
 		{
@@ -82,54 +81,101 @@ public:
 			exit(1);
 		}
 
-		for (unsigned int i = 0; i < matrix1.rows; ++i)
+		for (unsigned int i = 0; i < matrix.rows; ++i)
 		{
-			for (unsigned int j = 0; j < matrix1.columns; ++j)
+			for (unsigned int j = 0; j < matrix.columns; ++j)
 			{
-				matrix1.element[i][j] = matrix1.element[i][j] + element[i][j];
+				matrix.element[i][j] = matrix.element[i][j] + element[i][j];
 			}
 		}
-		return matrix1;
+		return matrix;
 	}
 
-	Matrix<Type>& operator *(Matrix<Type>& matrix1)
+	Matrix<Type>& operator *(Matrix<Type>& matrix)
 	{
 		try 
 		{
-			if (matrix1.rows != rows || matrix1.columns != columns) throw 2;
+			if (matrix.rows != rows || matrix.columns != columns) throw 3;
 		}
 		catch(int test)
 		{
-			cout << endl << "[-] Exception " << test << ": The operation of adding matrices is defined only for matrices of the same order!" << endl;
+			cout << endl << "[-] Exception " << test << ": The operation of multiplication matrices is defined only for matrices of the same order!" << endl;
 			exit(1);
 		}
 
-		Matrix<Type> matrix_temp(matrix1);
+		Matrix<Type> matrix_temp(matrix);
 
-		for (unsigned int i = 0; i < matrix1.rows; ++i)
+		for (unsigned int i = 0; i < matrix.rows; ++i)
 		{
-			for (unsigned int j = 0; j < matrix1.columns; ++j)
+			for (unsigned int j = 0; j < matrix.columns; ++j)
 			{
-				for (unsigned int k = 0; k < matrix1.columns; ++k)
+				for (unsigned int k = 0; k < matrix.columns; ++k)
 				{
-					matrix_temp.element[i][j] += matrix1.element[k][j]*element[i][k];
+					matrix_temp.element[i][j] += matrix.element[k][j]*element[i][k];
 				}
 				
 			}
 		}
 
-		for (unsigned int i = 0; i < matrix1.rows; ++i)
+		for (unsigned int i = 0; i < matrix.rows; ++i)
 		{
-			for (unsigned int j = 0; j < matrix1.columns; ++j)
+			for (unsigned int j = 0; j < matrix.columns; ++j)
 			{
-				matrix_temp.element[i][j] = matrix_temp.element[i][j] - matrix1.element[i][j];
+				matrix_temp.element[i][j] = matrix_temp.element[i][j] - matrix.element[i][j];
 			}	
 		}
 
-		matrix1 = matrix_temp;
+		matrix = matrix_temp;
 		
-		return matrix1;
+		return matrix;
 	}
+
+	Matrix<Type>& operator =(Matrix<Type>& matrix)
+	{
+		if (this == &matrix) { return *this; }
+		
+		for (unsigned int i = 0; i < rows; ++i) { delete element[i]; }
+		delete [] element;
+		
+		element = new Type*[matrix.rows];
+		for (unsigned int i = 0; i < matrix.rows; ++i) 
+		{
+			element[i] = new Type[matrix.columns];
+			for (unsigned int j = 0; j < matrix.columns; ++j)
+			{
+				element[i][j] = matrix.element[i][j];
+			}
+		}
+		rows = matrix.rows;
+		columns = matrix.rows;
+		return *this;
+	}
+
+	bool operator ==(const Matrix<Type>& matrix) const
+	{
+		try 
+		{
+			if (matrix.rows != rows || matrix.columns != columns) throw 4;
+		}
+		catch(int test)
+		{
+			cout << endl << "[-] False " << test << ": Matrices are not equal!" << endl;
+			return false;
+		}
+
+		if (matrix.rows == rows && matrix.columns == columns)
+		{
+			for (unsigned int i = 0; i < matrix.rows; ++i)
+			{
+				for (unsigned int j = 0; j < matrix.columns; ++j)
+				{
+					if (matrix.element[i][j] != element[i][j]) return false;
+				}
+			}
+		}
+		else return true;
+	}
+
 
 	Type** fill(Type** &element) 
 	{ 
@@ -245,9 +291,12 @@ int main(void)
 	cout << endl << "The result of multiplication: " << endl;
 	cout << matrix6_copy * matrix7;
 
+	cout << endl << "***Comparison of two matrices***" << endl;
+	cout << endl << "The first Matrix for comparison:";
 
-	for (unsigned int i = 0; i < rows; ++i) delete element[i]; 
-		delete [] element;
+	if ( matrix6_copy == matrix7 ) cout << endl << "[+] These matrices are equal!:)" << endl;
+	else cout << endl << "[-] These matrices are not equal!:)" << endl;
+
 
 	cout << endl << endl << "Press any button to exit the program " << endl;
 	_getch();
