@@ -56,7 +56,19 @@ public:
 		}
 	}
 
+	void writef(istream& write)
+	{
+		for (unsigned int i = 0; i < rows; ++i)
+		{
+			for (unsigned int j = 0; j < columns; ++j)
+			{
+				write >> element[i][j];
+			}
+		}
+	}
+
 	friend ostream& operator <<(ostream& print,const Matrix<Type>& matrix);
+	friend istream& operator >>(istream& write,const Matrix<Type>& matrix);
 	
 	Matrix<Type>& operator +(Matrix<Type>& matrix1)
 	{
@@ -110,13 +122,13 @@ public:
 		{
 			for (unsigned int j = 0; j < matrix1.columns; ++j)
 			{
-				matrix_temp.element[i][j] = matrix1.element[i][j] - element[i][j];
+				matrix_temp.element[i][j] = matrix_temp.element[i][j] - matrix1.element[i][j];
 			}	
 		}
 
-		cout << matrix_temp;
+		matrix1 = matrix_temp;
 		
-		//return matrix1;
+		return matrix1;
 	}
 
 	Type** fill(Type** &element) 
@@ -166,6 +178,13 @@ ostream& operator <<(ostream& print, Matrix<Type>& matrix)
 		return print;
 	}
 
+template <class Type>
+istream& operator >>(istream& write, Matrix<Type>& matrix)
+	{	
+		matrix.writef(write);
+		return write;
+	}
+
 int main(void)
 {
 	unsigned int rows = 0;
@@ -174,6 +193,7 @@ int main(void)
 	cout << endl << "Print the dimensions of Matrices:" << endl;
 	cout << "Rows: "; cin >> rows;
 	cout << "Columns: "; cin >> columns; 
+	cout << endl << "***The first way to work with matrices through text files***" << endl;
 
 	double** element = new double*[rows];
 	for (unsigned int i = 0; i < rows; ++i) element[i] = new double[columns];
@@ -199,6 +219,32 @@ int main(void)
 
 	cout << endl << "The result of multiplication: " << endl;
 	cout << matrix1 * matrix3;
+
+	cout << endl << "***The second way to work with matrices through streaming [>>]***" << endl;
+	cout << endl << "Basic Matrix:" << endl;
+	Matrix<double> matrix4(rows, columns,element);
+	cin >> matrix4;
+	cout << matrix4;
+	Matrix<double> matrix4_copy(matrix4);
+
+	cout << endl << "Matrix for summation: " << endl;
+	Matrix<double> matrix5(rows, columns,element);
+	cin >> matrix5;
+	cout << matrix5;
+
+	cout << endl << "The result of summation: " << endl;
+	cout << matrix4_copy + matrix5;
+
+	Matrix<double> matrix6_copy(matrix4_copy);
+
+	cout << endl << "Matrix for multiplication: " << endl;
+	Matrix<double> matrix7(rows, columns,element);
+	cin >> matrix7;
+	cout << matrix7;
+
+	cout << endl << "The result of multiplication: " << endl;
+	cout << matrix6_copy * matrix7;
+
 
 	for (unsigned int i = 0; i < rows; ++i) delete element[i]; 
 		delete [] element;
