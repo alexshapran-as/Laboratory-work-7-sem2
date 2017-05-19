@@ -7,13 +7,13 @@ using namespace std;
 template <class Type>
 class Matrix
 {
-private: 
-	unsigned int rows;
-	unsigned int columns;
+private:
 
 	Type** fill_matrix(string name_of_file, Type** &element);
 
 public:	
+	unsigned int rows;
+	unsigned int columns;
 	Type** element;
 
 	Matrix() { rows = 0; columns = 0; element = 0; }
