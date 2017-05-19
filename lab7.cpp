@@ -154,27 +154,18 @@ public:
 
 	bool operator ==(const Matrix<Type>& matrix) const
 	{
-		/*try 
+		if ((rows == matrix.rows) && (columns == matrix.columns)) 
 		{
-			if (matrix.rows != rows || matrix.columns != columns) throw 4;
-		}
-		catch(int test)
-		{
-			cout << endl << "[-] False " << test << ": Matrices are not equal!" << endl;
-			return false;
-		}*/
-
-		if (matrix.rows == rows && matrix.columns == columns)
-		{
-			for (unsigned int i = 0; i < matrix.rows; ++i)
+			for (unsigned int i = 0; i < rows; ++i)
 			{
-				for (unsigned int j = 0; j < matrix.columns; ++j)
+				for (unsigned int j = 0; j < columns; ++j) 
 				{
-					if (matrix.element[i][j] != element[i][j]) return false;
+					if (element[i][j] != matrix.element[i][j]) return false; 
 				}
 			}
+				
 		}
-		else return true;
+		else return false;
 	}
 
 
@@ -185,11 +176,11 @@ public:
 		fill_matrix(name_of_file, element); 
 	}
 
-	/*~Matrix()
+	~Matrix()
 	{
 		for (unsigned int i = 0; i < rows; ++i) delete element[i]; 
 		delete [] element;
-	}*/
+	}
 };
 
 template <class Type>
