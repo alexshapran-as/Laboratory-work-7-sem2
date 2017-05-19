@@ -1,4 +1,4 @@
-#include <testclass.hpp>
+#include <Laboratory-work-7-sem2.hpp>
 #include <catch.hpp>
 
 SCENARIO ("default"){
