@@ -7,7 +7,7 @@ SCENARIO ("default"){
 	REQUIRE (mat.columns == 0);
 }
 
-SCENARIO ("constructorTest"){
+SCENARIO ("Matrix"){
 	double** element;
 	Matrix<double> mat(2,2,element);
 	REQUIRE (mat.rows == mat.columns);
