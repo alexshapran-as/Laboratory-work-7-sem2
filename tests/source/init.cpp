@@ -7,12 +7,12 @@ SCENARIO ("default"){
 	REQUIRE (mat.columns == 0);
 }
 
-SCENARIO ("constructor with params"){
+/*SCENARIO ("constructor with params"){
 	double** element;
 	Matrix<double> mat(2,2,element);
 	REQUIRE (mat.rows == mat.columns);
 }
-/*SCENARIO("addTest","[!mayfail]"){
+SCENARIO("addTest","[!mayfail]"){
 	Matrix<int> mat3(3,3);
 	std::ifstream("mat3");
 	
