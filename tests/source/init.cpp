@@ -8,7 +8,8 @@ SCENARIO ("default"){
 }
 
 SCENARIO ("constructorTest"){
-	Matrix<double> mat(2.8,2.8);
+	double** element;
+	Matrix<double> mat(2,2,element);
 	REQUIRE (mat.rows == mat.columns);
 }
 /*SCENARIO("addTest","[!mayfail]"){
