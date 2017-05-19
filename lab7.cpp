@@ -148,12 +148,13 @@ public:
 		}
 		rows = matrix.rows;
 		columns = matrix.rows;
+
 		return *this;
 	}
 
 	bool operator ==(const Matrix<Type>& matrix) const
 	{
-		try 
+		/*try 
 		{
 			if (matrix.rows != rows || matrix.columns != columns) throw 4;
 		}
@@ -161,7 +162,7 @@ public:
 		{
 			cout << endl << "[-] False " << test << ": Matrices are not equal!" << endl;
 			return false;
-		}
+		}*/
 
 		if (matrix.rows == rows && matrix.columns == columns)
 		{
@@ -292,10 +293,14 @@ int main(void)
 	cout << matrix6_copy * matrix7;
 
 	cout << endl << "***Comparison of two matrices***" << endl;
-	cout << endl << "The first Matrix for comparison:";
+	cout << endl << "The first Matrix for comparison:" << endl;
+	cout << matrix6_copy;
+
+	cout << endl << "The second Matrix for comparison:" << endl;
+	cout << matrix7;
 
 	if ( matrix6_copy == matrix7 ) cout << endl << "[+] These matrices are equal!:)" << endl;
-	else cout << endl << "[-] These matrices are not equal!:)" << endl;
+	else cout << endl << "[-] These matrices are not equal!:(" << endl;
 
 
 	cout << endl << endl << "Press any button to exit the program " << endl;
